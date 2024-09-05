@@ -26,6 +26,7 @@ buildscript {
     }
     dependencies {
         classpath "net.serenity-bdd:serenity-gradle-plugin:3.9.8"
+        classpath "net.serenity-bdd:serenity-single-page-report:3.9.8"
     }
 }
 
@@ -71,3 +72,12 @@ test {
         systemProperty "cucumber.filter.tags", System.getProperty("cucumber.filter.tags")
     }
 }
+
+serenity {
+    testRoot = "com.co.pruebatecnicaweb.runners"
+    requirementsBaseDir = "src/test/resources/features"
+    reports = ["single-page-html"]
+}
+
+
+test.finalizedBy(aggregate)

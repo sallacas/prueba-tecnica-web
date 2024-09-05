@@ -16,12 +16,12 @@ public class Excel {
     public Excel() {
     }
 
-    public List<Map<String, String>> getData(String excelFilePath, String sheetName) throws InvalidFormatException, IOException {
+    public List<Map<String, String>> getData(String excelFilePath, String sheetName) throws IOException {
         Sheet sheet = this.getSheetByName(excelFilePath, sheetName);
         return this.readSheet(sheet);
     }
 
-    public List<Map<String, String>> getData(String excelFilePath, int sheetNumber) throws InvalidFormatException, IOException {
+    public List<Map<String, String>> getData(String excelFilePath, int sheetNumber) throws IOException {
         Sheet sheet = this.getSheetByIndex(excelFilePath, sheetNumber);
         return this.readSheet(sheet);
     }

@@ -26,11 +26,9 @@ public class RunnerPersonalizado extends Runner {
     private void runAnnotatedMethods() throws Exception {
         if (BeforeSuite.class.isAnnotation()) {
             Method[] methods = this.classValue.getMethods();
-            int var4 = methods.length;
 
             for (Method method : methods) {
                 Annotation[] annotations = method.getAnnotations();
-                int var9 = annotations.length;
 
                 for (Annotation item : annotations) {
                     if (item.annotationType().equals(BeforeSuite.class)) {

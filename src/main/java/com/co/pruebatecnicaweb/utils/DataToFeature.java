@@ -144,7 +144,6 @@ public class DataToFeature {
         } else {
             File[] var2 = folder.listFiles();
             assert var2 != null;
-            int var3 = var2.length;
 
             for (File fileEntry : var2) {
                 if (fileEntry.isDirectory()) {
