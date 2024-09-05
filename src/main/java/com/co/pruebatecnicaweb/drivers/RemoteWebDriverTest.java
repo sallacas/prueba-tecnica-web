@@ -3,16 +3,14 @@ package com.co.pruebatecnicaweb.drivers;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-
-
-import java.net.URL;
-
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.grid.Main;
 import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.net.URL;
 
 
 public class RemoteWebDriverTest {

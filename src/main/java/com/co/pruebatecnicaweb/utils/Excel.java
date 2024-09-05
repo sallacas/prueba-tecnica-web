@@ -1,20 +1,16 @@
 package com.co.pruebatecnicaweb.utils;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
+import org.apache.poi.ss.util.NumberToTextConverter;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
-import org.apache.poi.ss.util.NumberToTextConverter;
 
 public class Excel {
     public Excel() {
@@ -30,23 +26,21 @@ public class Excel {
         return this.readSheet(sheet);
     }
 
-    private Sheet getSheetByName(String excelFilePath, String sheetName) throws IOException, InvalidFormatException {
-        Sheet sheet = this.getWorkBook(excelFilePath).getSheet(sheetName);
-        return sheet;
+    private Sheet getSheetByName(String excelFilePath, String sheetName) throws IOException {
+        return this.getWorkBook(excelFilePath).getSheet(sheetName);
     }
 
-    private Sheet getSheetByIndex(String excelFilePath, int sheetNumber) throws IOException, InvalidFormatException {
-        Sheet sheet = this.getWorkBook(excelFilePath).getSheetAt(sheetNumber);
-        return sheet;
+    private Sheet getSheetByIndex(String excelFilePath, int sheetNumber) throws IOException {
+        return this.getWorkBook(excelFilePath).getSheetAt(sheetNumber);
     }
 
-    private Workbook getWorkBook(String excelFilePath) throws IOException, InvalidFormatException {
+    private Workbook getWorkBook(String excelFilePath) throws IOException {
         return WorkbookFactory.create(new File(excelFilePath));
     }
 
     private List<Map<String, String>> readSheet(Sheet sheet) {
         int totalRow = sheet.getPhysicalNumberOfRows();
-        List<Map<String, String>> excelRows = new ArrayList();
+        List<Map<String, String>> excelRows = new ArrayList<>();
         int headerRowNumber = this.getHeaderRowNumber(sheet);
         if (headerRowNumber != -1) {
             int totalColumn = sheet.getRow(headerRowNumber).getLastCellNum();
@@ -54,7 +48,7 @@ public class Excel {
 
             for(int currentRow = setCurrentRow; currentRow <= totalRow; ++currentRow) {
                 Row row = this.getRow(sheet, sheet.getFirstRowNum() + currentRow);
-                LinkedHashMap<String, String> columnMapdata = new LinkedHashMap();
+                LinkedHashMap<String, String> columnMapdata = new LinkedHashMap<>();
 
                 for(int currentColumn = 0; currentColumn < totalColumn; ++currentColumn) {
                     columnMapdata.putAll(this.getCellValue(sheet, row, currentColumn));
@@ -104,7 +98,7 @@ public class Excel {
     }
 
     private LinkedHashMap<String, String> getCellValue(Sheet sheet, Row row, int currentColumn) {
-        LinkedHashMap<String, String> columnMapdata = new LinkedHashMap();
+        LinkedHashMap<String, String> columnMapdata = new LinkedHashMap<>();
         String columnHeaderName;
         if (row == null) {
             if (sheet.getRow(sheet.getFirstRowNum()).getCell(currentColumn, MissingCellPolicy.CREATE_NULL_AS_BLANK).getCellType() != CellType.BLANK) {

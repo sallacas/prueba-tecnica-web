@@ -2,6 +2,7 @@ package com.co.pruebatecnicaweb.stepdefinitions;
 
 import com.co.pruebatecnicaweb.models.BookDTO;
 import com.co.pruebatecnicaweb.models.NewUserDTO;
+import com.co.pruebatecnicaweb.models.PracticeFormDTO;
 import com.co.pruebatecnicaweb.questions.ValidateText;
 import com.co.pruebatecnicaweb.tasks.*;
 import com.co.pruebatecnicaweb.userinterfaces.DemoQAPage;
@@ -9,15 +10,18 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
+import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.actors.OnStage;
 import org.hamcrest.Matchers;
 
 import java.util.List;
 
-import static com.co.pruebatecnicaweb.utils.Constantes.*;
+import static com.co.pruebatecnicaweb.utils.Constantes.ACTOR;
+import static com.co.pruebatecnicaweb.utils.Constantes.URL;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 
+@Slf4j
 public class DemoQAStepDefinitions {
 
 
@@ -28,7 +32,7 @@ public class DemoQAStepDefinitions {
 
 
     @When("El usuario selecciona la opción New User y registra un nuevo usuario con la siguiente información:")
-    public void elUsuarioSeleccionaLaOpcionYRegistraUnNuevoUsuarioConLaSiguienteInformación(DataTable table) {
+    public void createUser(DataTable table) {
         NewUserDTO data = table.asList(NewUserDTO.class).get(0);
         OnStage.theActorInTheSpotlight().attemptsTo(
                 CreateUser.with(data.getFirstname(), data.getLastname(), data.getUsername(), data.getPassword())
@@ -76,6 +80,14 @@ public class DemoQAStepDefinitions {
     public void extraemosLosDatosDeLosIframes() {
         OnStage.theActorInTheSpotlight().attemptsTo(
                 NestedFrames.getData()
+        );
+    }
+
+    @And("llenamos el formulario de prueba con los datos siguientes:")
+    public void fillPracticeForm(DataTable table) {
+        List<PracticeFormDTO> practiceForms = table.asList(PracticeFormDTO.class);
+        OnStage.theActorInTheSpotlight().attemptsTo(
+                PracticeForm.fillWith(practiceForms.get(0))
         );
     }
 }

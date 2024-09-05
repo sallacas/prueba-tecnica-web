@@ -6,17 +6,16 @@ import net.serenitybdd.core.Serenity;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.Tasks;
-import net.serenitybdd.screenplay.actions.*;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.actions.Switch;
 import net.serenitybdd.screenplay.annotations.Subject;
-import net.serenitybdd.screenplay.targets.IFrame;
-import net.serenitybdd.screenplay.waits.Wait;
 import net.serenitybdd.screenplay.waits.WaitUntil;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.time.Duration;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
 

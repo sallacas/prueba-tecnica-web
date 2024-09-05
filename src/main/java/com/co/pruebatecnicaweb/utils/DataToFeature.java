@@ -1,30 +1,24 @@
 package com.co.pruebatecnicaweb.utils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 public class DataToFeature {
     public DataToFeature() {
     }
 
     private static List<String> setExcelDataToFeature2(File featureFile) throws InvalidFormatException, IOException {
-        List<String> fileData = new ArrayList();
-        BufferedReader buffReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(featureFile)), "UTF-8"));
+        List<String> fileData = new ArrayList<>();
+        BufferedReader buffReader = new BufferedReader(new InputStreamReader(new BufferedInputStream(new FileInputStream(featureFile)), StandardCharsets.UTF_8));
 
         try {
-            List<Map<String, String>> excelData = null;
+            List<Map<String, String>> excelData;
             boolean foundHashTag = false;
             boolean featureData = false;
             boolean esUnRango = false;
@@ -39,7 +33,7 @@ public class DataToFeature {
                         break label113;
                     }
 
-                    String[] dataVector = null;
+                    String[] dataVector;
                     String[] dataVectorRango = null;
                     String sheetName = null;
                     String excelFilePath = null;
@@ -54,11 +48,11 @@ public class DataToFeature {
                         }
 
                         if (dataVector.length == 5) {
-                            if (dataVector[4].toString().contains("-")) {
+                            if (dataVector[4].contains("-")) {
                                 dataVectorRango = dataVector[4].trim().split("-");
                                 esRangoDefinido = true;
                                 filaSeleccionada = Integer.parseInt(dataVectorRango[pos]) - 1;
-                            } else if (dataVector[4].toString().contains(",")) {
+                            } else if (dataVector[4].contains(",")) {
                                 dataVectorRango = dataVector[4].trim().split(",");
                                 esUnRango = true;
                                 esMultiple = true;
@@ -76,19 +70,18 @@ public class DataToFeature {
                         excelData = (new Excel()).getData(excelFilePath, sheetName);
 
                         for(int rowNumber = filaSeleccionada; rowNumber < excelData.size() - 1; ++rowNumber) {
-                            String cellData = "";
-                            Iterator var18 = ((Map)excelData.get(rowNumber)).entrySet().iterator();
+                            StringBuilder cellData = new StringBuilder();
 
-                            while(var18.hasNext()) {
-                                Map.Entry<String, String> mapData = (Map.Entry)var18.next();
+                            for (Object o : ((Map) excelData.get(rowNumber)).entrySet()) {
+                                Map.Entry<String, String> mapData = (Map.Entry) o;
                                 if (dataVectorRango == null) {
-                                    cellData = cellData + "   |" + (String)mapData.getValue();
+                                    cellData.append("   |").append(mapData.getValue());
                                 } else if (esRangoDefinido) {
                                     if (rowNumber < Integer.parseInt(dataVectorRango[1])) {
-                                        cellData = cellData + "   |" + (String)mapData.getValue();
+                                        cellData.append("   |").append(mapData.getValue());
                                     }
                                 } else if (rowNumber + 1 == Integer.parseInt(dataVectorRango[pos]) && esUnRango) {
-                                    cellData = cellData + "   |" + (String)mapData.getValue();
+                                    cellData.append("   |").append(mapData.getValue());
                                 }
                             }
 
@@ -98,6 +91,7 @@ public class DataToFeature {
                             }
 
                             if (esMultiple) {
+                                assert dataVectorRango != null;
                                 if (pos + 1 < dataVectorRango.length) {
                                     filaSeleccionada = Integer.parseInt(dataVectorRango[pos + 1]) - 1;
                                     rowNumber = filaSeleccionada - 1;
@@ -114,10 +108,8 @@ public class DataToFeature {
 
                                 if (rowNumber + 1 == Integer.parseInt(dataVectorRango[1])) {
                                     rowNumber = excelData.size() - 1;
-                                    ++pos;
-                                } else {
-                                    ++pos;
                                 }
+                                ++pos;
                             }
                         }
 
@@ -146,15 +138,15 @@ public class DataToFeature {
     }
 
     private static List<File> listOfFeatureFiles(File folder) {
-        List<File> featureFiles = new ArrayList();
+        List<File> featureFiles = new ArrayList<>();
         if (folder.getName().endsWith(".feature")) {
             featureFiles.add(folder);
         } else {
             File[] var2 = folder.listFiles();
+            assert var2 != null;
             int var3 = var2.length;
 
-            for(int var4 = 0; var4 < var3; ++var4) {
-                File fileEntry = var2[var4];
+            for (File fileEntry : var2) {
                 if (fileEntry.isDirectory()) {
                     featureFiles.addAll(listOfFeatureFiles(fileEntry));
                 } else if (fileEntry.isFile() && fileEntry.getName().endsWith(".feature")) {
@@ -173,13 +165,11 @@ public class DataToFeature {
         for(Iterator var2 = listOfFeatureFiles.iterator(); var2.hasNext(); writer.close()) {
             File featureFile = (File)var2.next();
             List<String> featureWithExcelData = setExcelDataToFeature2(featureFile);
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(featureFile), "UTF-8"));
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(featureFile), StandardCharsets.UTF_8));
 
             try {
-                Iterator var6 = featureWithExcelData.iterator();
 
-                while(var6.hasNext()) {
-                    String string = (String)var6.next();
+                for (String string : featureWithExcelData) {
                     writer.write(string);
                     writer.write("\n");
                 }

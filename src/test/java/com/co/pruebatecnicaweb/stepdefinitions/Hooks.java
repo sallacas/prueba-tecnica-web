@@ -2,6 +2,7 @@ package com.co.pruebatecnicaweb.stepdefinitions;
 
 import com.co.pruebatecnicaweb.models.BookDTO;
 import com.co.pruebatecnicaweb.models.NewUserDTO;
+import com.co.pruebatecnicaweb.models.PracticeFormDTO;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.DataTableType;
@@ -38,6 +39,22 @@ public class Hooks {
     public BookDTO book(Map<String, String> entry) {
         return new BookDTO(
                 entry.get("book")
+        );
+    }
+    @DataTableType
+    public PracticeFormDTO practiceForm(Map<String, String> entry) {
+        return new PracticeFormDTO(
+                entry.get("firstname"),
+                entry.get("lastname"),
+                entry.get("email"),
+                entry.get("gender"),
+                entry.get("mobile"),
+                entry.get("date"),
+                entry.get("subject"),
+                entry.get("hobbies"),
+                entry.get("current-address"),
+                entry.get("state"),
+                entry.get("city")
         );
     }
 }
