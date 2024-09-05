@@ -16,7 +16,8 @@ import java.io.IOException;
 @CucumberOptions(
         features = "src/test/resources/features/demoqa.feature",
         glue = "com.co.pruebatecnicaweb.stepdefinitions",
-        snippets = CucumberOptions.SnippetType.CAMELCASE
+        snippets = CucumberOptions.SnippetType.CAMELCASE,
+        tags = "@Caso2"
 )
 public class TestDemoQARunner {
     @BeforeSuite

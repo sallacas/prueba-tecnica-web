@@ -71,4 +71,11 @@ public class DemoQAStepDefinitions {
         );
         OnStage.theActorInTheSpotlight().should(seeThat(ValidateText.of(DemoQAPage.TXT_ERROR), Matchers.containsString("Invalid username or password!")));
     }
+
+    @And("extraemos los datos de los iframes")
+    public void extraemosLosDatosDeLosIframes() {
+        OnStage.theActorInTheSpotlight().attemptsTo(
+                NestedFrames.getData()
+        );
+    }
 }
